@@ -3,7 +3,7 @@ import json
 from datetime import datetime, timedelta, date
 
 import json
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from ..models import Message, Base  # Assuming you've defined models corresponding to your table
@@ -42,18 +42,22 @@ def export_chat(token, channel_id, session):
 
         print("Messages loaded successfully:", messages)
 
-        # Insert messages into the database
-        for item in messages:
-            message_date = datetime.strptime(item['timestamp'],
-                                             '%Y-%m-%dT%H:%M:%S.%f%z').date()  # Parse timestamp to date
-            db_message = Message(
-                message_id=item['id'],
-                channel_id=channel_id,
-                message_date=message_date,
-                content=item['content']
-            )
-            session.add(db_message)
 
+        # Prepare bulk insert data
+        bulk_data = [{
+            'message_id': item['id'],
+            'channel_id': channel_id,
+            'message_date': datetime.strptime(item['timestamp'], '%Y-%m-%dT%H:%M:%S.%f%z').date(),
+            'content': item['content'],
+            'content_tsvector': text("to_tsvector('english', :content)")  # Prepare tsvector during bulk insertion
+        } for item in messages]
+
+        # Bulk insert using execute with text SQL
+        sql = text("""
+                    INSERT INTO discord_chats (message_id, channel_id, message_date, content, content_tsvector)
+                    VALUES (:message_id, :channel_id, :message_date, :content, to_tsvector('english', :content))
+                """)
+        session.execute(sql, bulk_data)
         session.commit()
         print(f"Successfully inserted {len(messages)} messages into the database.")
 

@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, DateTime, ForeignKey, Date
+from sqlalchemy.dialects.postgresql import TSVECTOR
 from sqlalchemy.orm import relationship
 from .core.database import Base
 
@@ -11,5 +12,7 @@ class Message(Base):
     channel_id = Column(String, nullable=False)  # Discord channel ID
     content = Column(String)  # Content of the message
     message_date = Column(Date, nullable=False)  # Date of when the message was sent
+    content_tsvector = Column(TSVECTOR)  # TSVECTOR column for full-text search
+
 
 
