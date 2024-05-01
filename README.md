@@ -104,6 +104,12 @@ Asynchronous programming is crucial for improving performance and scalability:
 - **Full-Text Search with `tsvector`**: Enhances PostgreSQL's search capabilities, using `tsvector` for efficient indexing and `plainto_tsquery` for simplifying search strings into a tsquery object.
 - **Text Search Efficiency with `pg_trgm`**: The `ilike` operator, supported by `pg_trgm` GIN indexing, allows for efficient, case-insensitive text searches.
 
+tsvector is a data type in PostgreSQL used for full-text searching. It represents a document in a compressed and preprocessed format optimized for text search. Here’s how it works in short:
+
+- Tokenization: The input text is split into tokens. Each token represents a word.
+- Normalization: Tokens are normalized to reduce them to a consistent form. This might involve lowercasing, stemming (reducing words to their base form), and removing stop words.
+- Vectorization: The normalized tokens are stored in a tsvector, along with optional position information for each token. This format is optimized for quick searches.
+
 ![Alt text for your diagram](readme_diagrams/tsvector.png)
 ![Alt text for your diagram](readme_diagrams/search_context.png)
 
@@ -120,6 +126,7 @@ CREATE TABLE discord_chats_2024_04 PARTITION OF discord_chats FOR VALUES FROM ('
 ![Alt text for your diagram](readme_diagrams/search_by_date.png)
 
 ### Utilizing Redis for Enhanced Search Capabilities
+Redis is the fastest in memory database
 Redis serves as a rapid-access cache layer:
 - **Speed**: Offers sub-millisecond response times for cached data, crucial for frequently made search queries.
 - **Reduced Load on Primary Database**: By caching results, Redis minimizes direct database queries, alleviating load during peak times.
@@ -128,6 +135,9 @@ Redis serves as a rapid-access cache layer:
 ![Alt text for your diagram](readme_diagrams/redis.png)
 
 ### Elasticsearch Versus PostgreSQL for Full-Text Search
+Elastic search is a distributed, restful search and analytics engine.
+Elasticsearch performs full-text searches through a combination of indexing and the use of powerful query DSL (Domain Specific Language).
+It performs tokenization and other steps like removing stop words, applying stemmers and then the tokens are indexed in a data structure called an inverted index, which helps in search operation.
 Elasticsearch provides superior full-text search functionalities:
 - **Designed for Search Operations**: Optimized for fast searching with a distributed nature for easy scalability.
 - **Complex Query Language**: Supports extensive, complex search queries including fuzzy searching and boolean logic.
