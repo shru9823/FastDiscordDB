@@ -121,14 +121,3 @@ async def paginated_search_by_date_range(start_date: date, end_date: date, pagin
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
         raise e
-
-# try:
-    #     query = func.plainto_tsquery('english', search_term)
-    #     stmt = select(Message).filter(Message.content_tsvector.op('@@')(query))
-    #     result = await session.execute(stmt)
-    #     messages = result.scalars().all()
-    #     logger.info(f"Successfully fetched {len(messages)} messages from the database.")
-    #     return [ChatMessageDisplay.from_orm(msg) for msg in messages]
-    # except Exception as e:
-    #     print(f"An unexpected error occurred: {e}")
-    #     raise e
