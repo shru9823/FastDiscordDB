@@ -44,7 +44,6 @@ FastDiscordDB is a FastAPI-powered application designed to handle the storage an
 │   │   └── search.py       # Endpoints for searching chats by keyword and date
 │   └── core                # Core application components
 │       ├── config.py       # Configuration settings (e.g., database URL, API keys)
-│       ├── security.py     # Security and authentication functions
 │       └── database.py     # Database connection setup
 │
 ├── tests                   # Test modules
