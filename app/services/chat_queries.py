@@ -76,7 +76,7 @@ async def paginated_context_search_by_keyword(search_term: str, pagination: Pagi
 
         # Get total count for pagination
         total_count_stmt = select(func.count()).select_from(Message).filter(
-            Message.content.ilike(f"%{search_term}%")
+            Message.content_tsvector.op('@@')(query)
         )
         total_count_result = await session.execute(total_count_stmt)
         total_count = total_count_result.scalar_one()

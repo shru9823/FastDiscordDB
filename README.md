@@ -458,6 +458,251 @@ No Messages Found - Status Code: 200 OK
   "detail": "No messages found"
 }
 ```
+### 5. Contextual Chat Message Search API
+
+This API endpoint allows for contextual searches within chat messages using a specific keyword. It supports pagination and utilizes caching for optimized performance. Search results are first attempted to be retrieved from the cache; if not available, the database is queried directly.
+
+#### HTTP Method
+`GET`
+
+#### Endpoint URL
+`/api/chats/context-search`
+
+#### Query Parameters
+- **search_term** (required): A keyword string used for searching within chat messages. The string must be between 1 and 100 characters in length.
+
+#### Dependencies
+- **PaginationParams**: Pagination control parameters (page number and page size), injected as a dependency.
+- **db**: An instance of `AsyncSession` for handling database operations, injected as a dependency.
+
+#### Headers
+No specific headers are required for this request.
+
+#### Request Example
+Include the `search_term` in the query string of your request URL along with pagination parameters like `page` and `size`. Here's an example:
+
+`GET /api/chats/context-search?search_term=example&page=1&size=10`
+
+#### Responses
+
+##### Success Response
+```json
+{
+  "messages": [
+    {
+      "message_id": "1234567890",
+      "channel_id": "0987654321",
+      "content": "How do we handle client requirements?",
+      "message_date": "2024-04-29"
+    }
+  ],
+  "count": 1
+}
+```
+#### Error Response Example
+Keyword Missing - Status Code: 400 Bad Request
+```{
+  "detail": "Keyword must not be empty"
+}
+```
+
+Internal Server Error - Status Code: 500 Internal Server Error
+```{
+  "detail": "An internal error occurred"
+}
+```
+
+No Messages Found - Status Code: 200 OK
+```{
+  "detail": "No messages found"
+}
+```
+
+### 6.  Search Chat Messages by Date Range
+
+This endpoint allows for searching chat messages within a specified date range, returning paginated results. The results are cached to enhance performance and reduce database load for frequent queries.
+
+#### HTTP Method
+`GET`
+
+#### URL
+`/api/chats/search/by-date`
+
+#### Query Parameters
+- **start_date**: The start date for the date range filter. The date format should be `YYYY-MM-DD`.
+- **end_date**: The end date for the date range filter. The date format should be `YYYY-MM-DD`.
+- **page**(Optional): The page number in the pagination sequence.
+- **page_size**(Optional): The number of chat messages to return per page.
+
+#### Headers
+No specific headers are required for this request.
+
+#### Request
+Include `start_date`, `end_date`, `page`, and `page_size` in the query string of your request URL.
+
+#### Response Model
+The response will be structured as a JSON object that follows the `PaginatedChatMessagesResponse` model, including fields for the total number of messages, the current page, total pages, and the list of messages.
+
+#### Success Response Example
+```json
+{
+  "messages": [
+    {
+      "message_id": 0,
+      "channel_id": 0,
+      "content": "string",
+      "message_date": "2024-05-01"
+    }
+  ],
+  "count": 0,
+  "total_count": 0
+}
+```
+
+#### Error Response Example
+
+Internal Server Error - Status Code: 500 Internal Server Error
+```{
+  "detail": "An internal error occurred"
+}
+```
+
+No Messages Found - Status Code: 200 OK
+```{
+  "detail": "No messages found"
+}
+```
+
+# 7.  Elasticsearch Chat Message Search API
+
+## Overview
+This API endpoint facilitates keyword-based search across chat messages stored in Elasticsearch, with pagination support. It enhances performance by leveraging caching via Redis. If cached results are available and valid, they are returned; otherwise, Elasticsearch is queried directly.
+
+## API Endpoint Details
+
+### HTTP Method
+`GET`
+
+### Endpoint URL
+`/api/es/chats/search`
+
+### Query Parameters
+- **keyword** (required): The search keyword used to find relevant chat messages. This is mandatory for the search operation.
+
+### Dependencies
+- **PaginationParams**: Controls the pagination aspects (such as page number and size), injected as a dependency.
+
+### Headers
+No specific headers are required for this request.
+
+### Request Example
+Include the `keyword` in the query string of your request URL along with pagination parameters. Here's how you might structure the request:
+
+`GET /api/es/chats/search?keyword=update&page=1&size=10`
+
+
+### Responses
+
+#### Success Response
+A successful response returns a list of messages that match the keyword, along with pagination details:
+
+```json
+{
+  "messages": [
+    {
+      "message_id": 0,
+      "channel_id": 0,
+      "content": "string",
+      "message_date": "2024-05-01"
+    }
+  ],
+  "count": 0,
+  "total_count": 0
+}
+```
+#### Error Response Example
+Keyword Missing - Status Code: 400 Bad Request
+```{
+  "detail": "Keyword must not be empty"
+}
+```
+
+Internal Server Error - Status Code: 500 Internal Server Error
+```{
+  "detail": "An internal error occurred"
+}
+```
+
+No Messages Found - Status Code: 404 Not Found
+```{
+  "detail": "No messages found"
+}
+```
+
+### 8. Elasticsearch Chat Message Search by Date API
+
+This API endpoint enables users to search for chat messages within a specific date range using Elasticsearch. It includes pagination and caching mechanisms to improve response times and reduce load on the backend systems.
+
+#### HTTP Method
+`GET`
+
+#### Endpoint URL
+`/api/es/chats/search/by-date`
+
+#### Query Parameters
+- **start_date** (required): The starting date of the search range (YYYY-MM-DD).
+- **end_date** (required): The ending date of the search range (YYYY-MM-DD).
+
+#### Dependencies
+- **PaginationParams**: Injected dependency that controls pagination aspects like page number and page size.
+
+#### Headers
+No specific headers are required for this request.
+
+#### Request Example
+To initiate a search, include the `start_date` and `end_date` in the query string along with pagination details:
+`GET /api/es/chats/search/by-date?start_date=2024-01-01&end_date=2024-01-31&page=1&size=10`
+
+#### Responses
+
+#### Success Response
+A successful response includes a list of messages that match the date range, along with pagination and source details:
+
+```commandline
+{
+  "data": [
+    {
+      "message_id": "1234404721570087004",
+      "channel_id": "869237617789648906",
+      "message_date": "2024-04-29",
+      "content": "nope"
+    },
+    {
+      "message_id": "1234404773013229651",
+      "channel_id": "869237617789648906",
+      "message_date": "2024-04-29",
+      "content": "I tried this"
+    }
+  ],
+  "total": 97,
+  "page": 1,
+  "page_size": 10
+}
+```
+
+#### Error Response Example
+
+Internal Server Error - Status Code: 500 Internal Server Error
+```{
+  "detail": "An internal error occurred"
+}
+```
+
+No Messages Found - Status Code: 200 OK
+```{
+  "detail": "No messages found"
+}
+```
 
 
 ## Security Practices
