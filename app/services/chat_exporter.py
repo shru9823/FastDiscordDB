@@ -63,9 +63,10 @@ async def insert_batch(session, batch, channel_id):
     try:
         # SQL execution of batch insert using prepared statements
         await session.execute(text("""
-            INSERT INTO discord_chats (message_id, channel_id, message_date, content, content_tsvector)
-            VALUES (:message_id, :channel_id, :message_date, :content, to_tsvector('english', :content))
-        """), [
+                    INSERT INTO discord_chats (message_id, channel_id, message_date, content, content_tsvector)
+                    VALUES (:message_id, :channel_id, :message_date, :content, to_tsvector('english', :content))
+                    ON CONFLICT (message_id, message_date) DO NOTHING
+                """), [
             {'message_id': int(item['id']), 'channel_id': int(channel_id),
              'message_date': datetime.strptime(item['timestamp'], '%Y-%m-%dT%H:%M:%S.%f%z').date(),
              'content': item['content'], 'content_tsvector': text("to_tsvector('english', :content)")}

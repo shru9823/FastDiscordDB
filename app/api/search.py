@@ -148,6 +148,9 @@ async def search_by_date(
 ):
     """Searches chat messages within a specified date range with pagination and caching."""
     redis = await get_redis()
+    if start_date > end_date:
+        raise HTTPException(status_code=400, detail="Start date must be less than or equal to end date.")
+
     try:
         # Construct a cache key that includes the date range and pagination parameters
         cache_key = f"search_date_range:{start_date}-{end_date}:page:{pagination.page}:size:{pagination.page_size}"
@@ -206,7 +209,7 @@ async def search_keyword_in_elasticsearch(
             "data": messages,
             "total": total,
             "page": pagination.page,
-            "page_size": pagination.size
+            "page_size": pagination.page_size
         }
 
         # Cache the serialized response for 1 hour
@@ -224,6 +227,9 @@ async def search_by_date_in_elasticsearch(
 ):
     """Searches for chat messages in Elasticsearch by date range, with caching of results."""
     redis = await get_redis()
+    if start_date > end_date:
+        raise HTTPException(status_code=400, detail="Start date must be less than or equal to end date.")
+
     try:
         # Update cache key with date range and pagination details
         cache_key = f"elasticsearch_date_range:{start_date}-{end_date}:page:{pagination.page}:size:{pagination.page_size}"
