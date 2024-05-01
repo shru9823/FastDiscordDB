@@ -126,7 +126,7 @@ CREATE TABLE discord_chats_2024_04 PARTITION OF discord_chats FOR VALUES FROM ('
 ![Alt text for your diagram](readme_diagrams/search_by_date.png)
 
 ### Utilizing Redis for Enhanced Search Capabilities
-Redis is the fastest in memory database
+Redis is the fastest in memory database.
 Redis serves as a rapid-access cache layer:
 - **Speed**: Offers sub-millisecond response times for cached data, crucial for frequently made search queries.
 - **Reduced Load on Primary Database**: By caching results, Redis minimizes direct database queries, alleviating load during peak times.
