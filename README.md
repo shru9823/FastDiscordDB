@@ -123,6 +123,8 @@ Asynchronous programming is crucial for improving performance and scalability:
 - **Text Search Efficiency with `pg_trgm`**: The `ilike` operator, supported by `pg_trgm` GIN indexing, allows for efficient, case-insensitive text searches.
 
 ![Alt text for your diagram](readme_diagrams/tsvector.png)
+![Alt text for your diagram](readme_diagrams/search_context.png)
+
 
 ### Database Optimization with Partitioning
 Partitioning by range on `message_date` in PostgreSQL allows the database engine to quickly locate and retrieve data from specific partitions, improving query performance and facilitating easier data management.
@@ -132,6 +134,8 @@ CREATE INDEX idx_message_date ON discord_chats(message_date);
 CREATE TABLE discord_chats_2024_04 PARTITION OF discord_chats FOR VALUES FROM ('2022-04-01') TO ('2022-04-30');
 
 ```
+
+![Alt text for your diagram](readme_diagrams/search_by_date.png)
 
 ### Utilizing Redis for Enhanced Search Capabilities
 Redis serves as a rapid-access cache layer:
@@ -154,6 +158,9 @@ Pagination is implemented across all search APIs to improve user experience and 
 - **User Experience**: Allows easy navigation through manageable chunks of data.
 - **Performance**: Enhances response times and conserves bandwidth by loading fewer items at a time.
 - **Resource Control**: Manages network traffic and resource allocation effectively, especially in cloud environments.
+
+![Alt text for your diagram](readme_diagrams/search.png)
+
 
 ### Conclusion
 The integration of these technologies and methodologies ensures that FastDiscordDB can efficiently handle large volumes of data, maintain high availability, and deliver quick API responses. This design is tailored for environments where data integrity, speed, and reliability are paramount.
