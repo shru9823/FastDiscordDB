@@ -70,28 +70,10 @@ FastDiscordDB is a FastAPI-powered application designed to handle the storage an
 ### Chat Export Workflow
 ![Alt text for your diagram](readme_diagrams/chat_export.png)
 
-Describe the process of exporting chat data from Discord channels into the PostgreSQL database. This includes:
-
-- **Data Retrieval**: Explain how the DiscordChatExporter tool is utilized to retrieve chat data as JSON, mentioning any authentication or API usage details.
-- **Data Transformation**: Detail how the JSON data is parsed and transformed into a suitable format for database storage.
-- **Data Storage**: Describe how the transformed data is stored in PostgreSQL, emphasizing any optimizations like batch inserts or database indexing strategies used to enhance performance.
 
 ### Search by Keyword and Date Range Workflow
 
 ![Alt text for your diagram](readme_diagrams/chat_search.png)
-
-Outline the processes for searching the database by keyword and date range, including both the user interface and backend operations:
-
-- **Search Interface**: Explain how users can input their search queries and select date ranges through the API endpoints.
-- **Query Execution**: Detail the backend process, including how queries are handled by Elasticsearch for keyword searches and PostgreSQL for date range searches, noting any use of indexing or caching mechanisms like Redis.
-- **Result Handling**: Describe how search results are formatted and returned to the user, and how pagination is implemented to manage large result sets efficiently.
-
-### Integration with System Architecture
-Link these workflows back to the system architecture described earlier in the document:
-
-- **Redis Caching**: Discuss how Redis is used to cache frequently accessed data to speed up repeat searches.
-- **Asynchronous Operations**: Highlight how asynchronous programming in FastAPI helps manage I/O-bound tasks efficiently, such as handling heavy search queries or processing large chat exports without blocking the main application flow.
-- **Scalability and Performance**: Mention how these workflows are designed to scale and what measures are in place to ensure they perform well under increased loads or data volumes.
 
 
 ## System Design and Optimizations
