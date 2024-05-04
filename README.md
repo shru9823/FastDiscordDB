@@ -724,6 +724,13 @@ The output from the `safety` check, as shown in the screenshot, provides a clear
 
 ![Alt text for your diagram](readme_diagrams/vulnerability_report.png)
 
+## API Performance Monitoring
+
+To monitor the api, optimize resource utilization and address performance issues, I have added Pyinstrument profiler. Below is a sample screenshot of Export chat API.
+The Export chat to postgre database took 4.58 seconds to upload some chat messages to Postgres.
+![Alt text for your diagram](readme_diagrams/profiler-1.png)
+![Alt text for your diagram](readme_diagrams/profiler-2.png)
+
 
 ## Future Scope for FastDiscordDB Project
 
